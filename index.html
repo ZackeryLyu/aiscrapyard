@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Scrapyard - Global AI Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              skin: {
+                fill: 'rgb(var(--color-fill) / <alpha-value>)',
+                surface: 'rgb(var(--color-surface) / <alpha-value>)',
+                card: 'rgb(var(--color-card) / <alpha-value>)',
+                'card-hover': 'rgb(var(--color-card-hover) / <alpha-value>)',
+                border: 'rgb(var(--color-border) / <alpha-value>)',
+                'border-highlight': 'rgb(var(--color-border-highlight) / <alpha-value>)',
+                base: 'rgb(var(--color-text-base) / <alpha-value>)',
+                muted: 'rgb(var(--color-text-muted) / <alpha-value>)',
+                dim: 'rgb(var(--color-text-dim) / <alpha-value>)',
+                primary: 'rgb(var(--color-primary) / <alpha-value>)',
+                'primary-hover': 'rgb(var(--color-primary-hover) / <alpha-value>)',
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      :root {
+        /* Default (Cosmic/Dark - Match original Slate theme) */
+        --color-fill: 2 6 23;      /* slate-950 */
+        --color-surface: 15 23 42; /* slate-900 */
+        --color-card: 30 41 59;    /* slate-800 */
+        --color-card-hover: 30 41 59; /* slate-800 */
+        --color-border: 30 41 59;  /* slate-800 */
+        --color-border-highlight: 51 65 85; /* slate-700 */
+        --color-text-base: 248 250 252; /* slate-50 */
+        --color-text-muted: 148 163 184; /* slate-400 */
+        --color-text-dim: 100 116 139;   /* slate-500 */
+        --color-primary: 79 70 229;     /* indigo-600 */
+        --color-primary-hover: 67 56 202; /* indigo-700 */
+      }
+
+      .theme-light {
+        --color-fill: 248 250 252;   /* slate-50 */
+        --color-surface: 255 255 255; /* white */
+        --color-card: 255 255 255;    /* white */
+        --color-card-hover: 241 245 249; /* slate-100 */
+        --color-border: 226 232 240;  /* slate-200 */
+        --color-border-highlight: 203 213 225; /* slate-300 */
+        --color-text-base: 15 23 42;  /* slate-900 */
+        --color-text-muted: 71 85 105; /* slate-600 */
+        --color-text-dim: 148 163 184; /* slate-400 */
+        --color-primary: 79 70 229;    /* indigo-600 */
+        --color-primary-hover: 67 56 202; /* indigo-700 */
+      }
+
+      .theme-midnight {
+        --color-fill: 3 7 18;        /* Very dark blue */
+        --color-surface: 11 15 28;   /* slightly lighter */
+        --color-card: 17 24 39;      /* gray-900 like */
+        --color-card-hover: 31 41 55;
+        --color-border: 31 41 55;    /* gray-800 */
+        --color-border-highlight: 55 65 81; /* gray-700 */
+        --color-text-base: 226 232 240; /* slate-200 */
+        --color-text-muted: 156 163 175; /* gray-400 */
+        --color-text-dim: 107 114 128;   /* gray-500 */
+        --color-primary: 139 92 246;     /* violet-500 */
+        --color-primary-hover: 124 58 237; /* violet-600 */
+      }
+
+      body {
+        background-color: rgb(var(--color-fill));
+        color: rgb(var(--color-text-base));
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      /* Custom scrollbar for webkit */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgb(var(--color-border-highlight)); 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgb(var(--color-text-dim)); 
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.3.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
