@@ -2,8 +2,68 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Scrapyard - Global AI Directory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- ==========================================
+         SEO & METADATA CONFIGURATION
+         ========================================== -->
+    <title>AI Scrapyard - Ultimate AI Tools Directory (Global & China)</title>
+    <meta name="description" content="Discover the best AI tools for Chat & LLMs, Image Generation, Video, Coding, and Data Analytics. A curated navigation directory comparing top AI solutions from China and the Global market." />
+    <meta name="keywords" content="AI Directory, AI Tools Navigation, Chat & LLMs, Image Generation AI, Video Creation AI, Coding Assistants, Data Analytics AI, Chinese AI Tools, Global AI Tools, ChatGPT vs Ernie, AI Scrapyard" />
+    <meta name="author" content="AI Scrapyard" />
+    <link rel="canonical" href="https://aiscrapyard.com" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aiscrapyard.com" />
+    <meta property="og:title" content="AI Scrapyard - Global AI Tools Directory" />
+    <meta property="og:description" content="Navigate the world of AI. Find the best tools for Chat, Design, Video, Audio, and Coding from both China and the Global market." />
+    <meta property="og:image" content="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f916.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://aiscrapyard.com" />
+    <meta property="twitter:title" content="AI Scrapyard - Global AI Tools Directory" />
+    <meta property="twitter:description" content="The ultimate collection of AI tools. Compare Chatbots, Image Generators, and Productivity tools from around the world." />
+    <meta property="twitter:image" content="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f916.png" />
+
+    <!-- Structured Data (JSON-LD) for Google Rich Results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AI Scrapyard",
+      "url": "https://aiscrapyard.com",
+      "description": "A curated directory of AI tools from China and across the globe.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://aiscrapyard.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "about": {
+        "@type": "ItemList",
+        "itemListElement": [
+          "Chat & LLMs",
+          "Productivity",
+          "Image Gen",
+          "Design & Creative",
+          "Video",
+          "Audio",
+          "Coding",
+          "Data & Analytics"
+        ]
+      }
+    }
+    </script>
+
+    <!-- PWA / iOS Web App Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AI Scrapyard" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f916.png" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -81,6 +141,8 @@
         background-color: rgb(var(--color-fill));
         color: rgb(var(--color-text-base));
         transition: background-color 0.3s ease, color 0.3s ease;
+        /* Prevent elastic scrolling on iOS for a more app-like feel */
+        overscroll-behavior-y: none;
       }
       /* Custom scrollbar for webkit */
       ::-webkit-scrollbar {
