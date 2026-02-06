@@ -1,13 +1,22 @@
 export enum ToolCategory {
-  CHATBOT = "Chat / LLMs",
-  IMAGE = "Image Generation",
-  VIDEO = "Video Creation",
-  CODING = "Coding Assistants",
-  AUDIO = "Audio & Speech",
-  PRODUCTIVITY = "Productivity & Writing",
-  SEARCH = "Search & Research",
-  DATA = "Data & Analytics",
-  DESIGN = "Design & Creative"
+  FOUNDATION = "foundation",
+  SEARCH = "search",
+  CODING = "coding",
+  WRITING = "writing",
+  IMAGE = "image",
+  VIDEO = "video",
+  AUDIO = "audio",
+  PRODUCTIVITY = "productivity",
+  KNOWLEDGE = "knowledge",
+  TRANSLATION = "translation",
+  BUSINESS = "business",
+  EDUCATION = "education",
+  HEALTH = "health",
+  SOCIAL = "social",
+  UI_UX = "ui_ux",
+  INFRA = "infra",
+  HARDWARE = "hardware",
+  NICHE = "niche"
 }
 
 export enum Region {
@@ -18,7 +27,7 @@ export enum Region {
 export interface AiTool {
   id: string;
   name: string;
-  description: string; // Default (English)
+  description: string; // Used as base description
   url: string;
   iconUrl: string;
   category: ToolCategory;
@@ -36,10 +45,14 @@ export interface ChatMessage {
   text: string;
 }
 
+export type FeedbackType = 'suggestion' | 'report' | 'general';
+
 export interface FeedbackSubmission {
-  toolName: string;
+  type: FeedbackType;
+  toolName?: string;
   toolUrl?: string;
   description: string;
+  contact?: string;
   timestamp: number;
 }
 

@@ -4,33 +4,17 @@ import { FeedbackSubmission } from "../types";
  * Handles the submission of user feedback.
  * 
  * CURRENTLY: Simulates an API call and logs to console.
- * TO DO: Replace the simulation with a real fetch call to your backend, 
- * Formspree, EmailJS, or Supabase.
  */
 export const submitFeedback = async (data: FeedbackSubmission): Promise<boolean> => {
-  // 1. Log to console (so you can see it in Developer Tools)
-  console.group("📝 New Feedback Submission");
-  console.log("Tool Name:", data.toolName);
-  console.log("URL:", data.toolUrl);
+  // 1. Log to console
+  console.group(`📝 New ${data.type.toUpperCase()} Submission`);
+  console.log("Type:", data.type);
+  if (data.toolName) console.log("Tool Name:", data.toolName);
+  if (data.toolUrl) console.log("URL:", data.toolUrl);
   console.log("Description:", data.description);
+  if (data.contact) console.log("Contact:", data.contact);
   console.log("Time:", new Date(data.timestamp).toLocaleString());
   console.groupEnd();
-
-  // 2. REAL BACKEND INTEGRATION EXAMPLE:
-  /*
-  try {
-    const response = await fetch('https://api.your-backend.com/feedback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error('Network error');
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-  */
 
   // 3. Simulate Network Delay (1.5s)
   return new Promise((resolve) => {
@@ -44,15 +28,36 @@ export const submitFeedback = async (data: FeedbackSubmission): Promise<boolean>
  * Generates a mailto link for manual submission via email client
  */
 export const generateEmailLink = (data: FeedbackSubmission, receiverEmail: string = "aiscrapyard.com@gmail.com") => {
-  const subject = encodeURIComponent(`[AI Nexus] New Tool Suggestion: ${data.toolName}`);
+  let subjectPrefix = "";
+  let bodyIntro = "";
+
+  switch (data.type) {
+    case 'report':
+      subjectPrefix = "Report Issue (举报/纠错)";
+      bodyIntro = "I would like to report an issue with a tool:";
+      break;
+    case 'general':
+      subjectPrefix = "Feedback (反馈)";
+      bodyIntro = "I have some feedback for AI Scrapyard:";
+      break;
+    case 'suggestion':
+    default:
+      subjectPrefix = "Suggestion (推荐工具)";
+      bodyIntro = "I would like to suggest a new tool for AI Scrapyard:";
+      break;
+  }
+
+  const subject = encodeURIComponent(`[AI Scrapyard] ${subjectPrefix}: ${data.toolName || 'General'}`);
+  
   const body = encodeURIComponent(
-`Hi,
+`${bodyIntro}
 
-I would like to suggest a new tool for AI Nexus:
+${data.toolName ? `- Tool Name: ${data.toolName}` : ''}
+${data.toolUrl ? `- URL: ${data.toolUrl}` : ''}
+- Description/Message: 
+${data.description}
 
-- Name: ${data.toolName}
-- URL: ${data.toolUrl || "N/A"}
-- Description: ${data.description}
+${data.contact ? `- Contact Info: ${data.contact}` : ''}
 
 Submitted at: ${new Date(data.timestamp).toLocaleString()}
 `

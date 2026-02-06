@@ -1,7 +1,12 @@
 import React from 'react';
 import { ToolCategory, Language } from '../types';
 import { translations } from '../i18n/locales';
-import { MessageSquare, Image, Video, Code, Mic, Briefcase, Search, LayoutGrid, BarChart3, Palette, PlusCircle } from 'lucide-react';
+import { 
+  Brain, Search, Code, PenTool, Image, Video, Mic, 
+  Briefcase, Book, Languages, Building, GraduationCap, 
+  HeartPulse, Gamepad2, Layout, Server, Cpu, Sprout, 
+  PlusCircle, LayoutGrid 
+} from 'lucide-react';
 
 interface SidebarProps {
   activeCategory: string;
@@ -12,21 +17,41 @@ interface SidebarProps {
   onOpenFeedback: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCategory, isOpen, onCloseMobile, currentLang, onOpenFeedback }) => {
+const Sidebar: React.FC<SidebarProps> = ({ 
+  activeCategory, 
+  onSelectCategory, 
+  isOpen, 
+  onCloseMobile, 
+  currentLang, 
+  onOpenFeedback 
+}) => {
   
   const t = translations[currentLang];
 
-  const categories = [
-    { id: 'All', label: t.categories['All'], icon: LayoutGrid },
-    { id: ToolCategory.CHATBOT, label: t.categories[ToolCategory.CHATBOT], icon: MessageSquare },
-    { id: ToolCategory.PRODUCTIVITY, label: t.categories[ToolCategory.PRODUCTIVITY], icon: Briefcase },
-    { id: ToolCategory.IMAGE, label: t.categories[ToolCategory.IMAGE], icon: Image },
-    { id: ToolCategory.DESIGN, label: t.categories[ToolCategory.DESIGN], icon: Palette },
-    { id: ToolCategory.VIDEO, label: t.categories[ToolCategory.VIDEO], icon: Video },
-    { id: ToolCategory.AUDIO, label: t.categories[ToolCategory.AUDIO], icon: Mic },
-    { id: ToolCategory.CODING, label: t.categories[ToolCategory.CODING], icon: Code },
-    { id: ToolCategory.DATA, label: t.categories[ToolCategory.DATA], icon: BarChart3 },
-    { id: ToolCategory.SEARCH, label: t.categories[ToolCategory.SEARCH], icon: Search },
+  const handleCategoryClick = (catId: string) => {
+    onSelectCategory(catId);
+    onCloseMobile();
+  };
+
+  const MENU_STRUCTURE = [
+    { id: ToolCategory.FOUNDATION, icon: Brain },
+    { id: ToolCategory.SEARCH, icon: Search },
+    { id: ToolCategory.CODING, icon: Code },
+    { id: ToolCategory.WRITING, icon: PenTool },
+    { id: ToolCategory.IMAGE, icon: Image },
+    { id: ToolCategory.VIDEO, icon: Video },
+    { id: ToolCategory.AUDIO, icon: Mic },
+    { id: ToolCategory.PRODUCTIVITY, icon: Briefcase },
+    { id: ToolCategory.KNOWLEDGE, icon: Book },
+    { id: ToolCategory.TRANSLATION, icon: Languages },
+    { id: ToolCategory.BUSINESS, icon: Building },
+    { id: ToolCategory.EDUCATION, icon: GraduationCap },
+    { id: ToolCategory.HEALTH, icon: HeartPulse },
+    { id: ToolCategory.SOCIAL, icon: Gamepad2 },
+    { id: ToolCategory.UI_UX, icon: Layout },
+    { id: ToolCategory.INFRA, icon: Server },
+    { id: ToolCategory.HARDWARE, icon: Cpu },
+    { id: ToolCategory.NICHE, icon: Sprout },
   ];
 
   return (
@@ -41,12 +66,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCategory, isO
 
       {/* Sidebar Container */}
       <aside className={`
-        fixed top-0 left-0 bottom-0 w-64 bg-skin-surface border-r border-skin-border z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static
+        fixed top-0 left-0 bottom-0 w-72 bg-skin-surface border-r border-skin-border z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         flex flex-col transition-colors duration-300
       `}>
         <div className="p-6 flex-1 overflow-y-auto scrollbar-thin">
-          <div className="flex items-center gap-3 mb-10">
+          <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-skin-primary to-purple-600 flex items-center justify-center shadow-lg shadow-skin-primary/20">
               <span className="text-white font-bold text-lg">A</span>
             </div>
@@ -56,23 +81,42 @@ const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCategory, isO
           </div>
 
           <nav className="space-y-1">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  onSelectCategory(cat.id);
-                  onCloseMobile();
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium ${
-                  activeCategory === cat.id
-                    ? 'bg-skin-primary text-white shadow-lg shadow-skin-primary/20'
-                    : 'text-skin-muted hover:bg-skin-fill hover:text-skin-base'
-                }`}
-              >
-                <cat.icon size={18} />
-                <span>{cat.label}</span>
-              </button>
-            ))}
+            {/* All Tools Button */}
+            <button
+              onClick={() => handleCategoryClick('All')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium ${
+                activeCategory === 'All'
+                  ? 'bg-skin-primary text-white shadow-lg shadow-skin-primary/20'
+                  : 'text-skin-muted hover:bg-skin-fill hover:text-skin-base'
+              }`}
+            >
+              <LayoutGrid size={18} />
+              <span>{t.categories['All']}</span>
+            </button>
+
+            <div className="h-4"></div>
+
+            {/* Main Categories */}
+            {MENU_STRUCTURE.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => handleCategoryClick(cat.id)}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 text-sm font-medium group ${
+                    isActive
+                      ? 'bg-skin-fill text-skin-primary'
+                      : 'text-skin-muted hover:bg-skin-fill hover:text-skin-base'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <cat.icon size={18} className={isActive ? 'text-skin-primary' : ''} />
+                    <span>{t.categories[cat.id] || cat.id}</span>
+                  </div>
+                </button>
+              );
+            })}
           </nav>
         </div>
 
