@@ -1,8 +1,9 @@
-import { ToolCategory } from '../types';
+import { ToolCategory, PricingModel } from '../types';
 
 export const translations = {
   'en': {
     appTitle: "AI Scrapyard",
+    directory: "Directory",
     searchPlaceholder: "Search for tools (e.g., 'video', 'chat')...",
     regionAll: "All",
     regionCN: "China",
@@ -11,6 +12,63 @@ export const translations = {
     noTools: "No tools found",
     tryAdjusting: "Try adjusting your filters or search terms.",
     footer: "AI Scrapyard. Built with React & Tailwind.",
+    pricing: {
+      [PricingModel.FREE]: "Free",
+      [PricingModel.FREEMIUM]: "Freemium",
+      [PricingModel.PAID]: "Paid",
+      [PricingModel.TRIAL]: "Free Trial",
+      [PricingModel.CONTACT]: "Contact Sales"
+    },
+    menuGroups: {
+      core: "Core Engines",
+      creative: "Creative Studio",
+      dev: "Dev & Tech",
+      work: "Work & Productivity",
+      life: "Life & Learning"
+    },
+    comparison: {
+      title: "Compare Tools",
+      selectToCompare: "Select to Compare",
+      selected: "Selected",
+      clear: "Clear All",
+      compare: "Compare Now",
+      maxLimit: "You can compare up to 3 tools.",
+      minLimit: "Please select at least 2 tools to compare.",
+      sameCategoryError: "You can only compare tools from the same category.",
+      empty: "Select tools to compare",
+      remove: "Remove",
+      vs: "VS",
+      dimensions: {
+        developer: "Developer",
+        platforms: "Platforms",
+        pricing: "Pricing",
+        region: "Region",
+        description: "Description",
+        // Foundation Model Special Dimensions
+        score: "Overall Score",
+        strengths: "Core Strengths",
+        limitations: "Limitations",
+        best_for: "Best For",
+        review: "Quick Review",
+        // Other Dynamic Features
+        context_window: "Context Window",
+        internet_access: "Internet Access",
+        multimodal: "Multimodal",
+        open_source: "Open Source",
+        citation: "Citations",
+        academic_focus: "Academic Focus",
+        ide_support: "IDE Support",
+        codebase_aware: "Codebase Aware",
+        deployment: "Deployment",
+        image_resolution: "Max Resolution",
+        text_rendering: "Text Rendering",
+        editing_tools: "Editing Tools",
+        video_duration: "Max Duration",
+        frame_rate: "Frame Rate",
+        voice_cloning: "Voice Cloning",
+        expressiveness: "Expressiveness"
+      }
+    },
     themes: {
       dark: "Cosmic",
       light: "Daylight",
@@ -68,7 +126,8 @@ export const translations = {
     }
   },
   'zh-CN': {
-    appTitle: "AI 小破村",
+    appTitle: "AI Scrapyard",
+    directory: "导航目录",
     searchPlaceholder: "搜索工具（例如：'视频', '聊天'）...",
     regionAll: "全部",
     regionCN: "中国",
@@ -76,7 +135,64 @@ export const translations = {
     visitWebsite: "访问网站",
     noTools: "未找到相关工具",
     tryAdjusting: "尝试调整筛选条件或搜索关键词。",
-    footer: "AI 小破村。基于 React & Tailwind 构建。",
+    footer: "AI Scrapyard. 基于 React & Tailwind 构建。",
+    pricing: {
+      [PricingModel.FREE]: "完全免费",
+      [PricingModel.FREEMIUM]: "免费试用/增值",
+      [PricingModel.PAID]: "付费",
+      [PricingModel.TRIAL]: "免费试用",
+      [PricingModel.CONTACT]: "联系销售"
+    },
+    menuGroups: {
+      core: "核心引擎",
+      creative: "创意工坊",
+      dev: "开发与技术",
+      work: "工作与生产力",
+      life: "生活与学习"
+    },
+    comparison: {
+      title: "工具对比",
+      selectToCompare: "加入对比",
+      selected: "已选择",
+      clear: "清空",
+      compare: "开始对比",
+      maxLimit: "最多同时对比 3 个工具。",
+      minLimit: "请至少选择 2 个工具进行对比。",
+      sameCategoryError: "只能对比同一分类下的工具。",
+      empty: "请选择工具进行对比",
+      remove: "移除",
+      vs: "PK",
+      dimensions: {
+        developer: "开发者/公司",
+        platforms: "支持平台",
+        pricing: "收费模式",
+        region: "地区",
+        description: "核心功能",
+        // Foundation Model Special Dimensions
+        score: "综合评分",
+        strengths: "核心竞争力",
+        limitations: "局限性",
+        best_for: "最佳应用场景",
+        review: "一句话点评",
+        // Other Dynamic Features
+        context_window: "上下文窗口",
+        internet_access: "联网能力",
+        multimodal: "多模态",
+        open_source: "是否开源",
+        citation: "引用信源",
+        academic_focus: "学术专注",
+        ide_support: "IDE 插件",
+        codebase_aware: "代码库感知",
+        deployment: "部署能力",
+        image_resolution: "最高分辨率",
+        text_rendering: "文字渲染",
+        editing_tools: "编辑功能",
+        video_duration: "生成时长",
+        frame_rate: "帧率 (FPS)",
+        voice_cloning: "声音克隆",
+        expressiveness: "情感表现力"
+      }
+    },
     themes: {
       dark: "深空灰",
       light: "极简白",
@@ -134,7 +250,8 @@ export const translations = {
     }
   },
   'zh-TW': {
-     appTitle: "AI 廢品收購站",
+    appTitle: "AI Scrapyard",
+    directory: "導航目錄",
     searchPlaceholder: "搜尋工具（例如：'視頻', '聊天'）...",
     regionAll: "全部",
     regionCN: "中國",
@@ -142,7 +259,64 @@ export const translations = {
     visitWebsite: "訪問網站",
     noTools: "未找到相關工具",
     tryAdjusting: "嘗試調整篩選條件或搜尋關鍵詞。",
-    footer: "AI 廢品收購站。基於 React & Tailwind 構建。",
+    footer: "AI Scrapyard. 基於 React & Tailwind 構建。",
+    pricing: {
+      [PricingModel.FREE]: "完全免費",
+      [PricingModel.FREEMIUM]: "免費試用/增值",
+      [PricingModel.PAID]: "付費",
+      [PricingModel.TRIAL]: "免費試用",
+      [PricingModel.CONTACT]: "聯繫銷售"
+    },
+    menuGroups: {
+      core: "核心引擎",
+      creative: "創意工坊",
+      dev: "開發與技術",
+      work: "工作與生產力",
+      life: "生活與學習"
+    },
+    comparison: {
+      title: "工具對比",
+      selectToCompare: "加入對比",
+      selected: "已選擇",
+      clear: "清空",
+      compare: "開始對比",
+      maxLimit: "最多同時對比 3 個工具。",
+      minLimit: "請至少選擇 2 個工具進行對比。",
+      sameCategoryError: "只能對比同一分類下的工具。",
+      empty: "請選擇工具進行對比",
+      remove: "移除",
+      vs: "PK",
+      dimensions: {
+        developer: "開發者/公司",
+        platforms: "支持平台",
+        pricing: "收費模式",
+        region: "地區",
+        description: "核心功能",
+        // Foundation Model Special Dimensions
+        score: "綜合評分",
+        strengths: "核心競爭力",
+        limitations: "局限性",
+        best_for: "最佳應用場景",
+        review: "一句話點評",
+        // Other Dynamic Features
+        context_window: "上下文窗口",
+        internet_access: "聯網能力",
+        multimodal: "多模態",
+        open_source: "是否開源",
+        citation: "引用信源",
+        academic_focus: "學術專注",
+        ide_support: "IDE 插件",
+        codebase_aware: "代碼庫感知",
+        deployment: "部署能力",
+        image_resolution: "最高分辨率",
+        text_rendering: "文字渲染",
+        editing_tools: "編輯功能",
+        video_duration: "生成時長",
+        frame_rate: "幀率 (FPS)",
+        voice_cloning: "聲音克隆",
+        expressiveness: "情感表現力"
+      }
+    },
     themes: {
       dark: "深空灰",
       light: "極簡白",
@@ -199,9 +373,9 @@ export const translations = {
       emailFallback: "通過郵件發送 (備份)"
     }
   },
-  // Keep other languages as fallback or minimal updates if needed, sticking to EN structure
   'ja': {
-      appTitle: "AI スクラップヤード",
+    appTitle: "AI Scrapyard",
+    directory: "ディレクトリ",
     searchPlaceholder: "ツールを検索（例：'動画', 'チャット'）...",
     regionAll: "すべて",
     regionCN: "中国",
@@ -209,7 +383,64 @@ export const translations = {
     visitWebsite: "サイトへ",
     noTools: "ツールが見つかりません",
     tryAdjusting: "フィルターや検索キーワードを調整してください。",
-    footer: "AI スクラップヤード。React & Tailwindで構築。",
+    footer: "AI Scrapyard。React & Tailwindで構築。",
+    pricing: {
+      [PricingModel.FREE]: "無料",
+      [PricingModel.FREEMIUM]: "フリーミアム",
+      [PricingModel.PAID]: "有料",
+      [PricingModel.TRIAL]: "無料トライアル",
+      [PricingModel.CONTACT]: "要問合せ"
+    },
+    menuGroups: {
+      core: "コアエンジン",
+      creative: "クリエイティブスタジオ",
+      dev: "開発 & 技術",
+      work: "仕事 & 生産性",
+      life: "生活 & 学習"
+    },
+    comparison: {
+      title: "比較",
+      selectToCompare: "比較に追加",
+      selected: "選択済み",
+      clear: "クリア",
+      compare: "比較する",
+      maxLimit: "最大3つまで比較できます。",
+      minLimit: "比較するには少なくとも2つのツールを選択してください。",
+      sameCategoryError: "同じカテゴリのツールのみ比較できます。",
+      empty: "ツールを選択してください",
+      remove: "削除",
+      vs: "VS",
+      dimensions: {
+        developer: "開発者/企業",
+        platforms: "プラットフォーム",
+        pricing: "料金モデル",
+        region: "地域",
+        description: "説明",
+        // Foundation Model Special Dimensions
+        score: "総合スコア",
+        strengths: "コアの強み",
+        limitations: "制限事項",
+        best_for: "最適な用途",
+        review: "レビュー",
+        // Other Dynamic Features
+        context_window: "コンテキストウィンドウ",
+        internet_access: "インターネット",
+        multimodal: "マルチモーダル",
+        open_source: "オープンソース",
+        citation: "引用元",
+        academic_focus: "学術フォーカス",
+        ide_support: "IDEサポート",
+        codebase_aware: "コードベース認識",
+        deployment: "デプロイ",
+        image_resolution: "最大解像度",
+        text_rendering: "テキスト描画",
+        editing_tools: "編集ツール",
+        video_duration: "最大再生時間",
+        frame_rate: "フレームレート",
+        voice_cloning: "音声クローン",
+        expressiveness: "表現力"
+      }
+    },
     themes: {
       dark: "コズミック",
       light: "デイライト",
@@ -267,7 +498,8 @@ export const translations = {
     }
   },
   'ko': {
-    appTitle: "AI 스크랩 야드",
+    appTitle: "AI Scrapyard",
+    directory: "디렉토리",
     searchPlaceholder: "도구 검색 (예: '비디오', '채팅')...",
     regionAll: "전체",
     regionCN: "중국",
@@ -275,7 +507,64 @@ export const translations = {
     visitWebsite: "웹사이트 방문",
     noTools: "도구를 찾을 수 없습니다",
     tryAdjusting: "필터나 검색어를 조정해보세요.",
-    footer: "AI 스크랩 야드. React & Tailwind로 제작.",
+    footer: "AI Scrapyard. React & Tailwind로 제작.",
+    pricing: {
+      [PricingModel.FREE]: "무료",
+      [PricingModel.FREEMIUM]: "부분 유료",
+      [PricingModel.PAID]: "유료",
+      [PricingModel.TRIAL]: "무료 체험",
+      [PricingModel.CONTACT]: "문의 필요"
+    },
+    menuGroups: {
+      core: "핵심 엔진",
+      creative: "크리에이티브 스튜디오",
+      dev: "개발 & 기술",
+      work: "업무 & 생산성",
+      life: "생활 & 학습"
+    },
+    comparison: {
+      title: "비교",
+      selectToCompare: "비교 추가",
+      selected: "선택됨",
+      clear: "초기화",
+      compare: "비교하기",
+      maxLimit: "최대 3개까지 비교할 수 있습니다.",
+      minLimit: "비교하려면 최소 2개의 도구를 선택하세요.",
+      sameCategoryError: "동일한 카테고리의 도구만 비교할 수 있습니다.",
+      empty: "비교할 도구를 선택하세요",
+      remove: "제거",
+      vs: "VS",
+      dimensions: {
+        developer: "개발자/회사",
+        platforms: "플랫폼",
+        pricing: "가격 모델",
+        region: "지역",
+        description: "설명",
+        // Foundation Model Special Dimensions
+        score: "종합 점수",
+        strengths: "핵심 경쟁력",
+        limitations: "한계점",
+        best_for: "최고의 활용",
+        review: "한줄 평",
+        // Other Dynamic Features
+        context_window: "컨텍스트 윈도우",
+        internet_access: "인터넷 접속",
+        multimodal: "멀티모달",
+        open_source: "오픈 소스",
+        citation: "인용",
+        academic_focus: "학술 중심",
+        ide_support: "IDE 지원",
+        codebase_aware: "코드베이스 인식",
+        deployment: "배포",
+        image_resolution: "최대 해상도",
+        text_rendering: "텍스트 렌더링",
+        editing_tools: "편집 도구",
+        video_duration: "최대 길이",
+        frame_rate: "프레임 속도",
+        voice_cloning: "음성 복제",
+        expressiveness: "표현력"
+      }
+    },
     themes: {
       dark: "코스믹",
       light: "데이라이트",
@@ -334,6 +623,7 @@ export const translations = {
   },
   'es': {
     appTitle: "AI Scrapyard",
+    directory: "Directorio",
     searchPlaceholder: "Buscar herramientas...",
     regionAll: "Todo",
     regionCN: "China",
@@ -342,6 +632,63 @@ export const translations = {
     noTools: "No se encontraron herramientas",
     tryAdjusting: "Intenta ajustar tus filtros.",
     footer: "AI Scrapyard.",
+    pricing: {
+      [PricingModel.FREE]: "Gratis",
+      [PricingModel.FREEMIUM]: "Freemium",
+      [PricingModel.PAID]: "Pago",
+      [PricingModel.TRIAL]: "Prueba Gratis",
+      [PricingModel.CONTACT]: "Contactar"
+    },
+    menuGroups: {
+      core: "Motores Centrales",
+      creative: "Estudio Creativo",
+      dev: "Desarrollo y Tecnología",
+      work: "Trabajo y Productividad",
+      life: "Vida y Aprendizaje"
+    },
+    comparison: {
+      title: "Comparar",
+      selectToCompare: "Comparar",
+      selected: "Seleccionado",
+      clear: "Limpiar",
+      compare: "Comparar",
+      maxLimit: "Máximo 3 herramientas.",
+      minLimit: "Selecciona al menos 2 herramientas para comparar.",
+      sameCategoryError: "Solo puedes comparar herramientas de la misma categoría.",
+      empty: "Selecciona herramientas",
+      remove: "Quitar",
+      vs: "VS",
+      dimensions: {
+        developer: "Desarrollador",
+        platforms: "Plataformas",
+        pricing: "Precios",
+        region: "Región",
+        description: "Descripción",
+        // Foundation Model Special Dimensions
+        score: "Puntuación",
+        strengths: "Fortalezas",
+        limitations: "Limitaciones",
+        best_for: "Mejor para",
+        review: "Reseña",
+        // Dynamic Features
+        context_window: "Ventana de contexto",
+        internet_access: "Acceso a Internet",
+        multimodal: "Multimodal",
+        open_source: "Código abierto",
+        citation: "Citas",
+        academic_focus: "Enfoque académico",
+        ide_support: "Soporte IDE",
+        codebase_aware: "Conciencia de código",
+        deployment: "Despliegue",
+        image_resolution: "Resolución máx",
+        text_rendering: "Renderizado de texto",
+        editing_tools: "Herramientas de edición",
+        video_duration: "Duración máx",
+        frame_rate: "Tasa de fotogramas",
+        voice_cloning: "Clonación de voz",
+        expressiveness: "Expresividad"
+      }
+    },
     themes: {
       dark: "Cósmico",
       light: "Diurno",
@@ -400,6 +747,7 @@ export const translations = {
   },
   'fr': {
     appTitle: "AI Scrapyard",
+    directory: "Répertoire",
     searchPlaceholder: "Rechercher...",
     regionAll: "Tout",
     regionCN: "Chine",
@@ -408,6 +756,63 @@ export const translations = {
     noTools: "Aucun outil trouvé",
     tryAdjusting: "Essayez d'ajuster vos filtres.",
     footer: "AI Scrapyard.",
+    pricing: {
+      [PricingModel.FREE]: "Gratuit",
+      [PricingModel.FREEMIUM]: "Freemium",
+      [PricingModel.PAID]: "Payant",
+      [PricingModel.TRIAL]: "Essai Gratuit",
+      [PricingModel.CONTACT]: "Contact"
+    },
+    menuGroups: {
+      core: "Moteurs Principaux",
+      creative: "Studio Créatif",
+      dev: "Dév & Tech",
+      work: "Travail & Productivité",
+      life: "Vie & Apprentissage"
+    },
+    comparison: {
+      title: "Comparer",
+      selectToCompare: "Comparer",
+      selected: "Sélectionné",
+      clear: "Effacer",
+      compare: "Comparer",
+      maxLimit: "Max 3 outils.",
+      minLimit: "Veuillez sélectionner au moins 2 outils à comparer.",
+      sameCategoryError: "Vous ne pouvez comparer que des outils de la même catégorie.",
+      empty: "Sélectionner des outils",
+      remove: "Retirer",
+      vs: "VS",
+      dimensions: {
+        developer: "Développeur",
+        platforms: "Plateformes",
+        pricing: "Prix",
+        region: "Région",
+        description: "Description",
+        // Foundation Model Special Dimensions
+        score: "Score global",
+        strengths: "Points forts",
+        limitations: "Limitations",
+        best_for: "Idéal pour",
+        review: "Avis rapide",
+        // Dynamic Features
+        context_window: "Fenêtre contextuelle",
+        internet_access: "Accès Internet",
+        multimodal: "Multimodal",
+        open_source: "Open Source",
+        citation: "Citations",
+        academic_focus: "Focus académique",
+        ide_support: "Support IDE",
+        codebase_aware: "Conscience du code",
+        deployment: "Déploiement",
+        image_resolution: "Résolution max",
+        text_rendering: "Rendu de texte",
+        editing_tools: "Outils d'édition",
+        video_duration: "Durée max",
+        frame_rate: "Fréquence d'images",
+        voice_cloning: "Clonage vocal",
+        expressiveness: "Expressivité"
+      }
+    },
     themes: {
       dark: "Cosmique",
       light: "Clair",
@@ -466,6 +871,7 @@ export const translations = {
   },
   'de': {
     appTitle: "AI Scrapyard",
+    directory: "Verzeichnis",
     searchPlaceholder: "Suchen...",
     regionAll: "Alle",
     regionCN: "China",
@@ -474,6 +880,63 @@ export const translations = {
     noTools: "Keine Tools gefunden",
     tryAdjusting: "Filter anpassen.",
     footer: "AI Scrapyard.",
+    pricing: {
+      [PricingModel.FREE]: "Kostenlos",
+      [PricingModel.FREEMIUM]: "Freemium",
+      [PricingModel.PAID]: "Bezahlt",
+      [PricingModel.TRIAL]: "Gratis Testen",
+      [PricingModel.CONTACT]: "Kontakt"
+    },
+    menuGroups: {
+      core: "Kern-Engines",
+      creative: "Kreativstudio",
+      dev: "Entwicklung & Technik",
+      work: "Arbeit & Produktivität",
+      life: "Leben & Lernen"
+    },
+    comparison: {
+      title: "Vergleichen",
+      selectToCompare: "Vergleichen",
+      selected: "Ausgewählt",
+      clear: "Leeren",
+      compare: "Vergleichen",
+      maxLimit: "Max 3 Tools.",
+      minLimit: "Bitte wählen Sie mindestens 2 Werkzeuge zum Vergleich aus.",
+      sameCategoryError: "Nur Tools der gleichen Kategorie vergleichbar.",
+      empty: "Tools auswählen",
+      remove: "Entfernen",
+      vs: "VS",
+      dimensions: {
+        developer: "Entwickler",
+        platforms: "Plattformen",
+        pricing: "Preise",
+        region: "Region",
+        description: "Beschreibung",
+        // Foundation Model Special Dimensions
+        score: "Gesamtpunktzahl",
+        strengths: "Stärken",
+        limitations: "Einschränkungen",
+        best_for: "Am besten für",
+        review: "Kurzbewertung",
+        // Dynamic Features
+        context_window: "Kontextfenster",
+        internet_access: "Internetzugang",
+        multimodal: "Multimodal",
+        open_source: "Open Source",
+        citation: "Zitate",
+        academic_focus: "Akademischer Fokus",
+        ide_support: "IDE-Unterstützung",
+        codebase_aware: "Codebase-Bewusstsein",
+        deployment: "Bereitstellung",
+        image_resolution: "Max. Auflösung",
+        text_rendering: "Textwiedergabe",
+        editing_tools: "Bearbeitungswerkzeuge",
+        video_duration: "Max. Dauer",
+        frame_rate: "Bildrate",
+        voice_cloning: "Stimmenklonen",
+        expressiveness: "Ausdruckskraft"
+      }
+    },
     themes: {
       dark: "Kosmisch",
       light: "Tag",
@@ -532,6 +995,7 @@ export const translations = {
   },
   'it': {
     appTitle: "AI Scrapyard",
+    directory: "Elenco",
     searchPlaceholder: "Cerca...",
     regionAll: "Tutti",
     regionCN: "Cina",
@@ -540,6 +1004,63 @@ export const translations = {
     noTools: "Nessun strumento",
     tryAdjusting: "Regola i filtri.",
     footer: "AI Scrapyard.",
+    pricing: {
+      [PricingModel.FREE]: "Gratis",
+      [PricingModel.FREEMIUM]: "Freemium",
+      [PricingModel.PAID]: "Pagamento",
+      [PricingModel.TRIAL]: "Prova Gratis",
+      [PricingModel.CONTACT]: "Contatto"
+    },
+    menuGroups: {
+      core: "Motori Centrali",
+      creative: "Studio Creativo",
+      dev: "Sviluppo & Tech",
+      work: "Lavoro & Produttività",
+      life: "Vita & Apprendimento"
+    },
+    comparison: {
+      title: "Confronta",
+      selectToCompare: "Confronta",
+      selected: "Selezionato",
+      clear: "Pulisci",
+      compare: "Confronta",
+      maxLimit: "Max 3 strumenti.",
+      minLimit: "Seleziona almeno 2 strumenti da confrontare.",
+      sameCategoryError: "Confronta solo strumenti della stessa categoria.",
+      empty: "Seleziona strumenti",
+      remove: "Rimuovi",
+      vs: "VS",
+      dimensions: {
+        developer: "Sviluppatore",
+        platforms: "Piattaforme",
+        pricing: "Prezzi",
+        region: "Regione",
+        description: "Descrizione",
+        // Foundation Model Special Dimensions
+        score: "Punteggio",
+        strengths: "Punti di forza",
+        limitations: "Limitazioni",
+        best_for: "Ideale per",
+        review: "Recensione",
+        // Dynamic Features
+        context_window: "Finestra di contesto",
+        internet_access: "Accesso Internet",
+        multimodal: "Multimodale",
+        open_source: "Open Source",
+        citation: "Citazioni",
+        academic_focus: "Focus accademico",
+        ide_support: "Supporto IDE",
+        codebase_aware: "Consapevolezza codice",
+        deployment: "Distribuzione",
+        image_resolution: "Risoluzione max",
+        text_rendering: "Resa del testo",
+        editing_tools: "Strumenti modifica",
+        video_duration: "Durata max",
+        frame_rate: "Frame Rate",
+        voice_cloning: "Clonazione voce",
+        expressiveness: "Espressività"
+      }
+    },
     themes: {
       dark: "Cosmico",
       light: "Giorno",

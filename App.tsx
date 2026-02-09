@@ -1,23 +1,29 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Menu, Search, PlusCircle } from 'lucide-react';
+import { Menu, Search, Scale, Sparkles, X } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import ToolCard from './components/ToolCard';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import FeedbackModal from './components/FeedbackModal';
+import ComparisonModal from './components/ComparisonModal';
+import AiAssistantModal from './components/AiAssistantModal';
 import { toolsData } from './data/tools';
-import { Region, AiTool, Language, Theme, FeedbackType } from './types';
+import { Region, AiTool, Language, Theme, FeedbackType, ToolCategory } from './types';
 import { translations } from './i18n/locales';
 
 const App: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All');
-  
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Default to 'ALL' for International Version
+  // Default to 'ALL' to show all tools (Chinese + Global) as requested
   const [regionFilter, setRegionFilter] = useState<'ALL' | Region>('ALL');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
+  // Comparison State
+  const [selectedTools, setSelectedTools] = useState<string[]>([]);
+  const [comparisonCategory, setComparisonCategory] = useState<ToolCategory | null>(null);
+  const [isComparisonOpen, setIsComparisonOpen] = useState(false);
+
   // Feedback Modal State
   const [feedbackState, setFeedbackState] = useState<{
     isOpen: boolean;
@@ -25,16 +31,18 @@ const App: React.FC = () => {
     toolName?: string;
   }>({ isOpen: false, type: 'suggestion' });
 
-  // Default to 'en' (English) for International Version
+  // AI Assistant State
+  const [isAiAssistantOpen, setIsAiAssistantOpen] = useState(false);
+
+  // Default to 'en' for English
   const [currentLang, setCurrentLang] = useState<Language>('en');
-  // Default to 'dark' (Cosmic) theme for International Version
+  // Default to 'dark' (Cosmic) theme
   const [currentTheme, setCurrentTheme] = useState<Theme>('dark');
 
   const t = translations[currentLang];
 
   // Apply theme to body/root
   useEffect(() => {
-    // Reset classes
     document.body.classList.remove('theme-light', 'theme-midnight');
     
     // Apply new theme class if not default (dark is default in :root)
@@ -43,265 +51,285 @@ const App: React.FC = () => {
     }
   }, [currentTheme]);
 
-  const handleOpenFeedback = (type: FeedbackType = 'suggestion') => {
-    setFeedbackState({ isOpen: true, type });
-  };
-
-  const handleReportTool = (tool: AiTool) => {
-    setFeedbackState({ 
-      isOpen: true, 
-      type: 'report',
-      toolName: tool.translations?.[currentLang]?.name || tool.name
-    });
-  };
-
-  // Filter Logic
+  // Filter Tools
   const filteredTools = useMemo(() => {
-    const query = searchQuery.toLowerCase().trim();
-    
     return toolsData.filter(tool => {
-      // 1. Check Base Fields (Name, Description, Tags)
-      const matchesBase = 
-        tool.name.toLowerCase().includes(query) || 
-        tool.description.toLowerCase().includes(query) ||
-        tool.tags.some(tag => tag.toLowerCase().includes(query));
+      // 1. Category Filter
+      if (activeCategory !== 'All' && tool.category !== activeCategory) {
+        return false;
+      }
 
-      // 2. Check ALL Available Translations (Global Search)
-      const matchesTranslations = tool.translations
-        ? Object.values(tool.translations).some(trans => 
-            (trans.name && trans.name.toLowerCase().includes(query)) ||
-            (trans.description && trans.description.toLowerCase().includes(query))
-          )
-        : false;
-      
-      const matchesSearch = matchesBase || matchesTranslations;
-      
-      // Category Match
-      const matchesCategory = activeCategory === 'All' || tool.category === activeCategory;
-      
-      const matchesRegion = regionFilter === 'ALL' || tool.region === regionFilter;
+      // 2. Region Filter
+      if (regionFilter !== 'ALL' && tool.region !== regionFilter) {
+        return false;
+      }
 
-      return matchesCategory && matchesSearch && matchesRegion;
+      // 3. Search Filter
+      if (searchQuery.trim()) {
+        const query = searchQuery.toLowerCase();
+        // Search in current language or default
+        const name = tool.translations?.[currentLang]?.name || tool.name;
+        const desc = tool.translations?.[currentLang]?.description || tool.description;
+        const tags = tool.tags.join(' ');
+        
+        return (
+          name.toLowerCase().includes(query) ||
+          desc.toLowerCase().includes(query) ||
+          tags.toLowerCase().includes(query)
+        );
+      }
+
+      return true;
     });
-  }, [activeCategory, searchQuery, regionFilter]);
+  }, [activeCategory, searchQuery, regionFilter, currentLang]);
 
-  // Group by category if 'All' is selected for a sectioned view
-  const displayGroups = useMemo<Record<string, AiTool[]>>(() => {
-    if (activeCategory === 'All') {
-        // Group by Main Category
-        const groups: Record<string, AiTool[]> = {};
-        filteredTools.forEach(tool => {
-            if (!groups[tool.category]) groups[tool.category] = [];
-            groups[tool.category].push(tool);
-        });
-        return groups;
+  // Group tools by category for display
+  const toolsByCategory = useMemo(() => {
+    const groups: Partial<Record<ToolCategory, AiTool[]>> = {};
+    
+    filteredTools.forEach(tool => {
+      if (!groups[tool.category]) {
+        groups[tool.category] = [];
+      }
+      groups[tool.category]!.push(tool);
+    });
+    
+    return groups;
+  }, [filteredTools]);
+
+  // Define category order (using the enum definition order for consistency)
+  const categoryOrder = Object.values(ToolCategory);
+
+  // Comparison Logic
+  const handleToggleCompare = (tool: AiTool) => {
+    if (selectedTools.includes(tool.id)) {
+      const newSelection = selectedTools.filter(id => id !== tool.id);
+      setSelectedTools(newSelection);
+      if (newSelection.length === 0) {
+        setComparisonCategory(null);
+      }
     } else {
-        // Single Category View - no sub grouping needed
-        return { [activeCategory]: filteredTools };
+      if (selectedTools.length >= 3) {
+        alert(t.comparison.maxLimit);
+        return;
+      }
+      if (comparisonCategory && tool.category !== comparisonCategory) {
+        alert(t.comparison.sameCategoryError);
+        return;
+      }
+      setSelectedTools([...selectedTools, tool.id]);
+      setComparisonCategory(tool.category);
     }
-  }, [activeCategory, filteredTools]);
+  };
+
+  const selectedToolObjects = toolsData.filter(t => selectedTools.includes(t.id));
 
   return (
-    <div className="flex min-h-screen bg-skin-fill text-skin-base font-sans selection:bg-skin-primary/30 transition-colors duration-300">
+    // Changed: min-h-screen -> h-screen overflow-hidden to fix scrolling issues
+    <div className="flex h-screen overflow-hidden bg-skin-fill text-skin-base transition-colors duration-300 font-sans selection:bg-skin-primary/30">
       
-      {/* Sidebar Navigation */}
+      {/* Sidebar */}
       <Sidebar 
         activeCategory={activeCategory} 
-        onSelectCategory={setActiveCategory}
+        onSelectCategory={(cat) => {
+          setActiveCategory(cat);
+          // Removed window.scrollTo since we now scroll the container
+          const container = document.getElementById('tools-container');
+          if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
         isOpen={isSidebarOpen}
         onCloseMobile={() => setIsSidebarOpen(false)}
         currentLang={currentLang}
-        onOpenFeedback={() => handleOpenFeedback('suggestion')}
+        onOpenFeedback={() => setFeedbackState({ isOpen: true, type: 'general' })}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col h-full overflow-hidden relative w-full">
         
-        {/* Top Header */}
-        <header className="h-20 border-b border-skin-border bg-skin-surface/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-6 lg:px-10 transition-colors duration-300">
-          <div className="flex items-center gap-4">
+        {/* Header */}
+        <header className="h-16 border-b border-skin-border bg-skin-surface/80 backdrop-blur-md flex items-center justify-between px-4 lg:px-8 z-30 shrink-0">
+          <div className="flex items-center gap-3 lg:hidden">
             <button 
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 hover:bg-skin-fill rounded-lg text-skin-muted hover:text-skin-base transition-colors"
+              className="p-2 -ml-2 text-skin-muted hover:text-skin-base"
             >
               <Menu size={24} />
             </button>
-            <div className="lg:hidden font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-skin-base to-skin-muted">
-              {t.appTitle}
-            </div>
+            <span className="font-bold text-lg text-skin-base">{t.appTitle}</span>
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-xl mx-4 hidden md:block relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-skin-dim group-focus-within:text-skin-primary transition-colors" size={18} />
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t.searchPlaceholder}
-              className="w-full bg-skin-fill border border-skin-border rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-skin-primary/50 focus:border-skin-primary transition-all placeholder-skin-dim text-skin-base"
-            />
-          </div>
-
-          {/* Right Actions */}
-          <div className="flex items-center gap-3">
-             {/* Region Filter */}
-             <div className="hidden sm:flex bg-skin-surface rounded-lg p-1 border border-skin-border-highlight">
+          <div className="flex-1 max-w-xl mx-auto hidden lg:block relative">
+            <div className="relative group">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t.searchPlaceholder}
+                className="w-full bg-skin-fill border border-skin-border rounded-xl py-2 pl-10 pr-4 text-sm text-skin-base focus:outline-none focus:ring-2 focus:ring-skin-primary/50 transition-all placeholder-skin-dim group-hover:border-skin-border-highlight"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-skin-dim group-hover:text-skin-muted transition-colors" size={16} />
+              {searchQuery && (
                 <button 
-                  onClick={() => setRegionFilter('ALL')}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${regionFilter === 'ALL' ? 'bg-skin-fill text-skin-base shadow' : 'text-skin-muted hover:text-skin-base'}`}
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-skin-dim hover:text-skin-base"
                 >
-                  {t.regionAll}
+                  <X size={14} />
                 </button>
-                <button 
-                  onClick={() => setRegionFilter(Region.CN)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${regionFilter === Region.CN ? 'bg-red-500/10 text-red-500 shadow' : 'text-skin-muted hover:text-skin-base'}`}
-                >
-                  {t.regionCN}
-                </button>
-                <button 
-                  onClick={() => setRegionFilter(Region.GLOBAL)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${regionFilter === Region.GLOBAL ? 'bg-blue-500/10 text-blue-500 shadow' : 'text-skin-muted hover:text-skin-base'}`}
-                >
-                  {t.regionGlobal}
-                </button>
-             </div>
-
-             {/* Theme Switcher */}
-             <ThemeSwitcher currentTheme={currentTheme} onThemeChange={setCurrentTheme} currentLang={currentLang} />
-
-             {/* Language Switcher */}
-             <LanguageSwitcher currentLang={currentLang} onLanguageChange={setCurrentLang} />
-          </div>
-        </header>
-
-        {/* Mobile Search Bar (Below Header) */}
-        <div className="md:hidden px-6 py-4 border-b border-skin-border bg-skin-fill">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-skin-dim" size={18} />
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t.searchPlaceholder}
-              className="w-full bg-skin-surface border border-skin-border rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-skin-primary/50 text-skin-base"
-            />
-          </div>
-          {/* Mobile Region Filter */}
-          <div className="flex mt-3 bg-skin-surface rounded-lg p-1 border border-skin-border">
-            <button 
-              onClick={() => setRegionFilter('ALL')}
-              className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${regionFilter === 'ALL' ? 'bg-skin-fill text-skin-base shadow' : 'text-skin-muted'}`}
-            >
-              {t.regionAll}
-            </button>
-            <button 
-              onClick={() => setRegionFilter(Region.CN)}
-              className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${regionFilter === Region.CN ? 'bg-red-500/10 text-red-500 shadow' : 'text-skin-muted'}`}
-            >
-              {t.regionCN}
-            </button>
-            <button 
-              onClick={() => setRegionFilter(Region.GLOBAL)}
-              className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${regionFilter === Region.GLOBAL ? 'bg-blue-500/10 text-blue-500 shadow' : 'text-skin-muted'}`}
-            >
-              {t.regionGlobal}
-            </button>
-          </div>
-        </div>
-
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6 lg:p-10 scrollbar-thin">
-          <div className="max-w-7xl mx-auto space-y-12">
-            
-            {/* Header Text for Context */}
-            {activeCategory !== 'All' && (
-              <div className="mb-4">
-                 <h2 className="text-3xl font-bold text-skin-base">{(t.categories as any)[activeCategory]}</h2>
-              </div>
-            )}
-
-            {/* Results Grid */}
-            {Object.keys(displayGroups).length === 0 ? (
-              <div className="text-center py-20">
-                <div className="w-16 h-16 bg-skin-surface rounded-full flex items-center justify-center mx-auto mb-4 border border-skin-border">
-                  <Search className="text-skin-dim" size={32} />
-                </div>
-                <h3 className="text-xl font-semibold text-skin-base">{t.noTools}</h3>
-                <p className="text-skin-muted mt-2">{t.tryAdjusting}</p>
-                
-                <button 
-                  onClick={() => handleOpenFeedback('suggestion')}
-                  className="mt-6 px-6 py-2.5 bg-skin-primary hover:bg-skin-primary-hover text-white rounded-xl font-medium transition-colors inline-flex items-center gap-2"
-                >
-                  <PlusCircle size={18} />
-                  <span>{t.feedback.button}</span>
-                </button>
-              </div>
-            ) : (
-              <>
-                {(Object.entries(displayGroups) as [string, AiTool[]][]).map(([groupKey, tools]) => {
-                  let label = (t.categories as any)[groupKey] || groupKey;
-                  
-                  return (
-                    <section key={groupKey} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                      <div className="flex items-center gap-3 mb-6">
-                        <h2 className="text-xl font-bold text-skin-base">{label}</h2>
-                        <div className="h-px bg-skin-border flex-1 ml-4"></div>
-                        <span className="text-xs text-skin-muted font-mono bg-skin-surface px-2 py-1 rounded border border-skin-border">
-                          {tools.length}
-                        </span>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {tools.map(tool => (
-                          <ToolCard 
-                            key={tool.id} 
-                            tool={tool} 
-                            currentLang={currentLang} 
-                            onReport={handleReportTool}
-                          />
-                        ))}
-                      </div>
-                    </section>
-                  );
-                })}
-
-                {/* Bottom CTA for feedback when results are present */}
-                <div className="py-8 text-center border-t border-skin-border/50 mt-12">
-                  <p className="text-skin-muted text-sm mb-4">{t.feedback.suggestion.subtitle}</p>
-                  <button 
-                    onClick={() => handleOpenFeedback('suggestion')}
-                    className="text-skin-primary hover:text-skin-primary-hover text-sm font-medium hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>{t.feedback.button}</span>
-                    <PlusCircle size={14} />
-                  </button>
-                </div>
-              </>
-            )}
-
-            {/* Footer */}
-            <div className="pt-6 pb-8 border-t border-skin-border text-center text-skin-muted text-sm flex flex-col gap-2">
-              <p>&copy; {new Date().getFullYear()} {t.footer}</p>
-              {currentLang === 'zh-CN' && (
-                <div>
-                  <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" className="hover:text-skin-base transition-colors">备案号：</a>
-                  <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" className="hover:text-skin-base transition-colors">晋ICP备2026000851号</a>
-                </div>
               )}
             </div>
           </div>
+
+          {/* Right Actions */}
+          <div className="flex items-center gap-2 lg:gap-3">
+            {/* Region Toggle removed as requested to show all data by default */}
+
+            <ThemeSwitcher currentTheme={currentTheme} onThemeChange={setCurrentTheme} currentLang={currentLang} />
+            <LanguageSwitcher currentLang={currentLang} onLanguageChange={setCurrentLang} />
+            
+            {/* AI Assistant Button */}
+            <button
+              onClick={() => setIsAiAssistantOpen(true)}
+              className="hidden sm:flex items-center justify-center p-2 rounded-lg bg-skin-primary/10 text-skin-primary hover:bg-skin-primary hover:text-white transition-all border border-skin-primary/20"
+              title="AI Assistant"
+            >
+              <Sparkles size={18} />
+            </button>
+          </div>
+        </header>
+
+        {/* Mobile Search Bar (Visible only on mobile below header) */}
+        <div className="lg:hidden p-4 pb-0 bg-skin-fill shrink-0">
+           <div className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t.searchPlaceholder}
+                className="w-full bg-skin-surface border border-skin-border rounded-xl py-2.5 pl-10 pr-4 text-sm text-skin-base focus:outline-none focus:ring-2 focus:ring-skin-primary/50"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-skin-dim" size={16} />
+           </div>
+        </div>
+
+        {/* Tool Grid Content - ID added for scrolling */}
+        <div id="tools-container" className="flex-1 overflow-y-auto scrollbar-thin p-4 lg:p-8">
+          
+          {/* Comparison Floating Bar */}
+          {selectedTools.length > 0 && (
+            <div className="fixed bottom-6 left-1/2 lg:left-[calc(50%+9rem)] -translate-x-1/2 z-40 flex items-center gap-4 bg-skin-surface/90 backdrop-blur-md border border-skin-primary/30 shadow-2xl shadow-skin-primary/10 px-6 py-3 rounded-2xl animate-in slide-in-from-bottom-10 fade-in duration-300">
+              <div className="flex items-center gap-2 text-sm font-medium text-skin-base">
+                <Scale size={18} className="text-skin-primary" />
+                <span>{selectedTools.length} {t.comparison.selected}</span>
+              </div>
+              <div className="h-4 w-px bg-skin-border"></div>
+              <button 
+                onClick={() => setIsComparisonOpen(true)}
+                disabled={selectedTools.length < 2}
+                className="text-sm font-bold text-skin-primary hover:text-skin-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t.comparison.compare}
+              </button>
+              <button 
+                onClick={() => {
+                  setSelectedTools([]);
+                  setComparisonCategory(null);
+                }}
+                className="p-1 hover:bg-skin-fill rounded-full text-skin-muted hover:text-red-500 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
+
+          {filteredTools.length > 0 ? (
+            <div className="pb-20 space-y-10">
+              {categoryOrder.map(cat => {
+                const catTools = toolsByCategory[cat];
+                if (!catTools || catTools.length === 0) return null;
+
+                return (
+                  <div key={cat} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                     {/* Category Header */}
+                     <div className="flex items-center gap-4 mb-6">
+                        <h2 className="text-xl font-bold text-skin-base flex items-center gap-3">
+                            {t.categories[cat]}
+                            <span className="text-xs font-semibold text-skin-muted bg-skin-surface border border-skin-border px-2.5 py-0.5 rounded-full shadow-sm">
+                                {catTools.length}
+                            </span>
+                        </h2>
+                        <div className="flex-1 h-px bg-gradient-to-r from-skin-border via-skin-border/50 to-transparent"></div>
+                     </div>
+                     
+                     {/* Tools Grid */}
+                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                        {catTools.map(tool => (
+                            <ToolCard 
+                              key={tool.id} 
+                              tool={tool} 
+                              currentLang={currentLang}
+                              onReport={() => setFeedbackState({ isOpen: true, type: 'report', toolName: tool.name })}
+                              isSelected={selectedTools.includes(tool.id)}
+                              onToggleCompare={handleToggleCompare}
+                              isComparisonDisabled={comparisonCategory !== null && tool.category !== comparisonCategory}
+                            />
+                        ))}
+                     </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[50vh] text-center">
+              <div className="w-20 h-20 bg-skin-surface border border-skin-border rounded-full flex items-center justify-center mb-4">
+                <Search size={32} className="text-skin-dim" />
+              </div>
+              <h3 className="text-xl font-bold text-skin-base mb-2">{t.noTools}</h3>
+              <p className="text-skin-muted">{t.tryAdjusting}</p>
+              <button 
+                onClick={() => {
+                  setSearchQuery('');
+                  setRegionFilter('ALL');
+                  setActiveCategory('All');
+                }}
+                className="mt-6 text-skin-primary font-medium hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+
+          {/* Footer */}
+          <footer className="mt-12 pt-8 pb-8 border-t border-skin-border/50 text-center">
+            <p className="text-skin-muted text-sm mb-4">{t.footer}</p>
+          </footer>
         </div>
       </main>
 
-      {/* Feedback Modal */}
+      {/* Modals */}
       <FeedbackModal 
         isOpen={feedbackState.isOpen} 
+        onClose={() => setFeedbackState({ ...feedbackState, isOpen: false })}
         initialType={feedbackState.type}
         initialToolName={feedbackState.toolName}
-        onClose={() => setFeedbackState(prev => ({ ...prev, isOpen: false }))} 
         currentLang={currentLang}
+      />
+
+      <ComparisonModal
+        isOpen={isComparisonOpen}
+        onClose={() => setIsComparisonOpen(false)}
+        tools={selectedToolObjects}
+        currentLang={currentLang}
+        onRemoveTool={(id) => {
+          const newSelection = selectedTools.filter(tid => tid !== id);
+          setSelectedTools(newSelection);
+          if (newSelection.length === 0) setComparisonCategory(null);
+        }}
+      />
+
+      <AiAssistantModal 
+        isOpen={isAiAssistantOpen}
+        onClose={() => setIsAiAssistantOpen(false)}
       />
     </div>
   );

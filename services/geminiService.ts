@@ -17,7 +17,7 @@ export const getGeminiRecommendation = async (userQuery: string): Promise<string
     const toolsContext = toolsData.map(t => `- ${t.name} (${t.region}): ${t.description}`).join('\n');
 
     const prompt = `
-    You are an expert AI software consultant for a website called "AI 小破村" (AI Xiao Po Cun).
+    You are an expert AI software consultant for a website called "AI Scrapyard".
     
     The user is asking: "${userQuery}"
 

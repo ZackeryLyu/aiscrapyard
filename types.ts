@@ -24,19 +24,32 @@ export enum Region {
   CN = "China"
 }
 
+export enum PricingModel {
+  FREE = "Free",
+  FREEMIUM = "Freemium", // Free tier available but paid for upgrades
+  PAID = "Paid",         // Paid only
+  TRIAL = "Free Trial",  // Time-limited trial
+  CONTACT = "Contact"    // Enterprise/Contact Sales
+}
+
 export interface AiTool {
   id: string;
   name: string;
-  description: string; // Used as base description
+  description: string; // Used as base description (Default English)
   url: string;
   iconUrl: string;
   category: ToolCategory;
   region: Region;
+  pricing: PricingModel[];
+  developer?: string; // New field for comparison
+  platforms?: string[]; // New field: "Web", "iOS", "Android", "API", "Mac", "Windows"
+  features?: Record<string, string | boolean | number>; // Dynamic category-specific comparison data (Default English)
   tags: string[];
   isPopular?: boolean;
   translations?: Partial<Record<Language, {
     name?: string;
     description?: string;
+    features?: Record<string, string | boolean | number>; // Localized features
   }>>;
 }
 
