@@ -3,7 +3,7 @@ import { ToolCategory, PricingModel } from '../types';
 export const translations = {
   'en': {
     appTitle: "AI Scrapyard",
-    directory: "Directory",
+    directory: "AI Tools Directory",
     searchPlaceholder: "Search for tools (e.g., 'video', 'chat')...",
     regionAll: "All",
     regionCN: "China",
@@ -127,7 +127,7 @@ export const translations = {
   },
   'zh-CN': {
     appTitle: "AI Scrapyard",
-    directory: "导航目录",
+    directory: "AI 工具导航集合",
     searchPlaceholder: "搜索工具（例如：'视频', '聊天'）...",
     regionAll: "全部",
     regionCN: "中国",
@@ -251,7 +251,7 @@ export const translations = {
   },
   'zh-TW': {
     appTitle: "AI Scrapyard",
-    directory: "導航目錄",
+    directory: "AI 工具導航集合",
     searchPlaceholder: "搜尋工具（例如：'視頻', '聊天'）...",
     regionAll: "全部",
     regionCN: "中國",
@@ -375,7 +375,7 @@ export const translations = {
   },
   'ja': {
     appTitle: "AI Scrapyard",
-    directory: "ディレクトリ",
+    directory: "AIツールディレクトリ",
     searchPlaceholder: "ツールを検索（例：'動画', 'チャット'）...",
     regionAll: "すべて",
     regionCN: "中国",
@@ -499,7 +499,7 @@ export const translations = {
   },
   'ko': {
     appTitle: "AI Scrapyard",
-    directory: "디렉토리",
+    directory: "AI 도구 디렉토리",
     searchPlaceholder: "도구 검색 (예: '비디오', '채팅')...",
     regionAll: "전체",
     regionCN: "중국",
